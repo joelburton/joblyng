@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 
 import JoblyApi, {AuthCredential, ISignupData, IUser} from "./api/api";
-import Navigation from "./routes-nav/Navigation";
-import {BrowserRouter} from "react-router-dom";
-import Routes from "./routes-nav/Routes";
 import UserContext from './auth/UserContext';
 import LoadingSpinner from "./common/LoadingSpinner";
+import JoblyApp from "./JoblyApp";
 
 export const TOKEN_STORAGE_ID = "jobly-token";
 
+
+/** App is just about authentication & providing user info. Perhaps this should
+ * have a better name? And then App would render this?
+ */
 
 function App() {
     // This state is subtle: there are three possible values for {user: } ---
@@ -16,7 +18,7 @@ function App() {
     //  - null: there is no logged in user
     //  - user obj
     const [currUserResponse, setCurrUserResponse] =
-        useState<{user?: IUser | null, errors?: string[]}>(() => ({
+        useState<{ user?: IUser | null, errors?: string[] }>(() => ({
             user: localStorage.getItem(TOKEN_STORAGE_ID) ? undefined : null
         }));
 
@@ -29,8 +31,8 @@ function App() {
      */
 
     useEffect(function checkLocalStorageToken() {
-        const token = localStorage.getItem(TOKEN_STORAGE_ID);
-        console.info("& App.checkLocalStorageToken", "token=", token);
+            const token = localStorage.getItem(TOKEN_STORAGE_ID);
+            console.info("& App.checkLocalStorageToken", "token=", token);
 
             async function tryLocalStorageToken() {
                 console.info("& App.tryLocalStorageToken", "token=", token);
@@ -74,13 +76,31 @@ function App() {
         setCurrUserResponse({user: await JoblyApi.fetchUser(token!)});
     }
 
-    function hasAppliedToJob(jobId: number) : boolean {
-        console.debug(jobId);
-        return true; // TODO
+    function hasAppliedToJob(jobId: number): boolean {
+        return currUserResponse.user?.applications.includes(jobId) === true;
     }
 
-    function applyToJob(jobId: number) {
-        console.debug(jobId);
+    async function applyToJob(jobId: number) {
+        await JoblyApi.applyToJob(currUserResponse.user!.username, jobId);
+        setCurrUserResponse(ur => ({
+            user: {
+                ...ur.user!,
+                applications: [...ur.user!.applications, jobId]
+            }
+        }));
+    }
+
+    async function updateProfile(
+        username: string,
+        profileData: {
+            firstName: string,
+            lastName: string,
+            email: string,
+            password: string,
+        }) {
+
+        const user = await JoblyApi.saveProfile(username, profileData);
+        setCurrUserResponse({user});
     }
 
     // In process of trying localStorage token; so don't proceed until done.
@@ -88,18 +108,18 @@ function App() {
 
     return (
         <div className="App">
-            <BrowserRouter>
-                <UserContext.Provider
-                    value={{
-                        currUser: currUserResponse.user!,
-                        setCurrUserResponse,
-                        hasAppliedToJob,
-                        applyToJob,
-                    }}>
-                    <Navigation logout={logout} />
-                    <Routes login={login} signup={signup} />
-                </UserContext.Provider>
-            </BrowserRouter>
+            <UserContext.Provider
+                value={{
+                    currUser: currUserResponse.user!,
+                    updateProfile,
+                    hasAppliedToJob,
+                    applyToJob,
+                    signup,
+                    login,
+                    logout,
+                }}>
+                <JoblyApp />
+            </UserContext.Provider>
         </div>
     );
 }

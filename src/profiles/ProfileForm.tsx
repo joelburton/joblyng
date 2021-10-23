@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import Alert from "../common/Alert";
-import JoblyApi from "../api/api";
 import UserContext from "../auth/UserContext";
 
 // eslint-disable-next-line
@@ -21,7 +20,7 @@ import UserContext from "../auth/UserContext";
  */
 
 function ProfileForm() {
-  const { currUser, setCurrUserResponse } = useContext(UserContext);
+  const { currUser, updateProfile } = useContext(UserContext);
   const [formData, setFormData] = useState({
     firstName: currUser!.firstName,
     lastName: currUser!.lastName,
@@ -58,8 +57,7 @@ function ProfileForm() {
     const profileData = {firstName, lastName, email, password};
 
     try {
-      const user = await JoblyApi.saveProfile(username, profileData);
-      setCurrUserResponse({user});
+      await updateProfile(username, profileData);
     } catch (errors: any) {
       setFormErrors(errors);
       return;

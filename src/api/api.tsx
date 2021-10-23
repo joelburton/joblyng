@@ -78,7 +78,7 @@ class JoblyApi {
 
   /** Get the current user. */
 
-  static async getCurrentUser(username: string) {
+  static async getCurrentUser(username: string): Promise<IUser> {
     let res = await this.request(`users/${username}`);
     return res.user;
   }

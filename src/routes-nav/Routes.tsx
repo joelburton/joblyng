@@ -2,7 +2,6 @@ import React, {useContext} from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import LoginForm from "../auth/LoginForm";
 import CompanyPage from "../companies/CompanyPage";
-import {AuthCredential, ISignupData} from "../api/api";
 import UserContext from "../auth/UserContext";
 import CompanyList from "../companies/CompanyListPage";
 import ProfileForm from "../profiles/ProfileForm";
@@ -18,14 +17,9 @@ import Homepage from "../homepage/Homepage";
  * Visiting a non-existent route redirects to the homepage.
  */
 
-function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, signup: (arg0: ISignupData) => void}) {
-  console.info(
-      "* Routes",
-      `login=${typeof login}`,
-      `signup=${typeof signup}`,
-  );
-
-  const { currUser } = useContext(UserContext);
+function Routes() {
+  const { currUser, login, signup } = useContext(UserContext);
+  console.info("* Routes currUser=", currUser);
 
     return (
       <div className="pt-5">

@@ -5,9 +5,12 @@ import { IUser } from "../api/api";
 
 const UserContext = React.createContext<{
     currUser: IUser | null,
-    setCurrUserResponse: any,
+    updateProfile: any,
     hasAppliedToJob: any,
     applyToJob: any,
-}>({currUser: null, setCurrUserResponse: null, hasAppliedToJob: null, applyToJob: null});
+    signup: any,
+    login: any,
+    logout: any,
+}>({currUser: null, updateProfile: null, hasAppliedToJob: null, applyToJob: null, signup: null, login: null, logout: null});
 
 export default UserContext;

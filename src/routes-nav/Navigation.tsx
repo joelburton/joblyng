@@ -11,8 +11,8 @@ import "./Navigation.css";
  * Rendered by App.
  */
 
-function Navigation({ logout }: {logout: () => void}) {
-  const { currUser } = useContext(UserContext);
+function Navigation() {
+  const { currUser, logout } = useContext(UserContext);
   console.info("* Navigation", "currentUser=", currUser);
 
   function loggedInNav() {
