@@ -13,16 +13,16 @@ import "./SearchForm.css";
  * { CompanyList, JobList } -> SearchForm
  */
 
-function SearchForm({ searchFor }: { searchFor: (arg0: string | undefined) => void}) {
-  console.info("* SearchForm", "searchFor=", typeof searchFor);
+function SearchForm({ initialFilter="", setFilter }: { initialFilter?: string, setFilter: (arg0: string | undefined) => void}) {
+  console.info("* SearchForm", "setFilterFor=", typeof setFilter);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(initialFilter || "");
 
   /** Tell parent to filter */
   function handleSubmit(evt: React.FormEvent) {
     // take care of accidentally trying to search for just spaces
     evt.preventDefault();
-    searchFor(searchTerm.trim() || undefined);
+    setFilter(searchTerm.trim() || undefined);
     setSearchTerm(searchTerm.trim());
   }
 

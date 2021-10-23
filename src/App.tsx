@@ -9,13 +9,13 @@ import JoblyApp from "./JoblyApp";
 export const TOKEN_STORAGE_ID = "jobly-token";
 
 
+// noinspection JSIgnoredPromiseFromCall
 /** App is just about authentication & providing user info. Perhaps this should
  * have a better name? And then App would render this?
  */
 
 
 // could separate the "token" LS stuff to a separate component, passing token down?
-
 
 
 function App() {
@@ -39,19 +39,18 @@ function App() {
     useEffect(function checkLocalStorageToken() {
             const token = localStorage.getItem(TOKEN_STORAGE_ID);
             console.info("& App.checkLocalStorageToken", "token=", token);
+            if (token) {
+                // noinspection JSIgnoredPromiseFromCall
+                tryLocalStorageToken()
+            }
 
             async function tryLocalStorageToken() {
                 console.info("& App.tryLocalStorageToken", "token=", token);
                 try {
                     setCurrUserResponse({user: await JoblyApi.fetchUser(token!)});
-                } catch {
-                    // might be an invalid token or network err -- ignore and move on
+                } catch { // if can't use LS token, ignore and move on
                     setCurrUserResponse({user: null});
                 }
-            }
-
-            if (token) { // noinspection JSIgnoredPromiseFromCall
-                tryLocalStorageToken()
             }
         }, []
     );

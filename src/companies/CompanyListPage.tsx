@@ -21,26 +21,28 @@ function CompanyList() {
 
     const [companiesResponse, setCompaniesResponse] =
         useState<{ companies?: ICompanyData[], errors?: string[] }>({});
+    const [filter, setFilter] = useState<string>();
 
-    console.info("* CompanyListPage", "companiesResponse=", companiesResponse);
+    console.info("* CompanyListPage", "companiesResponse=", companiesResponse, "filter=", filter);
 
     /** Triggered by search form submit; reloads companies. */
-    async function fetchCompanies(name?: string) {
-        console.info("> CompanyListPage.fetchCompanies");
-        try {
-            let companies = await JoblyApi.getCompanies(name);
-            setCompaniesResponse({companies});
-        } catch (errors: any) {
-            setCompaniesResponse({errors});
-        }
-    }
 
-    useEffect(function fetchCompaniesOnMount() {
+    // handled differently than jobs --- which is better?
+    // this is "state-based", and gives two renders --- filter changed, then list changed
+    useEffect(function fetchCompaniesOnFilterChange() {
         console.info("& CompanyListPage.fetchCompaniesOnMount");
+        async function fetchCompanies() {
+            console.info("> CompanyListPage.fetchCompanies");
+            try {
+                let companies = await JoblyApi.getCompanies(filter);
+                setCompaniesResponse({companies});
+            } catch (errors: any) {
+                setCompaniesResponse({errors});
+            }
+        }
         // noinspection JSIgnoredPromiseFromCall
         fetchCompanies();
-    }, []);
-
+    }, [filter]);
 
     if (companiesResponse.errors) return <Alert messages={companiesResponse.errors} />
 
@@ -48,7 +50,7 @@ function CompanyList() {
 
     return (
         <div className="CompanyList col-md-8 offset-md-2">
-            <SearchForm searchFor={fetchCompanies} />
+            <SearchForm initialFilter={filter} setFilter={setFilter} />
             {companiesResponse.companies.length
                 ? (
                     <div className="CompanyList-list">
