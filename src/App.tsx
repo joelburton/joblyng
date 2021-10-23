@@ -13,6 +13,11 @@ export const TOKEN_STORAGE_ID = "jobly-token";
  * have a better name? And then App would render this?
  */
 
+
+// could separate the "token" LS stuff to a separate component, passing token down?
+
+
+
 function App() {
     // This state is subtle: there are three possible values for {user: } ---
     //  - undefined: app is trying to log in w/localstorage token, if any
@@ -39,9 +44,9 @@ function App() {
                 console.info("& App.tryLocalStorageToken", "token=", token);
                 try {
                     setCurrUserResponse({user: await JoblyApi.fetchUser(token!)});
-                } catch (errs: any) {
-                    // might be an invalid token or network err
-                    setCurrUserResponse({errors: errs});
+                } catch {
+                    // might be an invalid token or network err -- ignore and move on
+                    setCurrUserResponse({user: null});
                 }
             }
 
