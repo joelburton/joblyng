@@ -2,10 +2,11 @@ import React from "react";
 
 /** Presentational component for showing bootstrap-style alerts.
  *
- * { LoginForm, SignupForm, ProfileForm } -> Alert
+ * { LoginForm, SignupPage, ProfileForm } -> Alert
  **/
 
-function Alert({ type = "danger", messages = [] }) {
+function Alert(
+    { type = "danger", messages } : { type?: string, messages: string[]}) {
   console.debug("Alert", "type=", type, "messages=", messages);
 
   return (

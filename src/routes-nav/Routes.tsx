@@ -1,28 +1,26 @@
 import React, {useContext} from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-// import Homepage from "../homepage/Homepage";
-// import CompanyList from "../companies/CompanyList";
-// import JobList from "../jobs/JobList";
 import LoginForm from "../auth/LoginForm";
 import CompanyPage from "../companies/CompanyPage";
-import {AuthCredential} from "../api/api";
+import {AuthCredential, ISignupData} from "../api/api";
 import UserContext from "../auth/UserContext";
 import CompanyList from "../companies/CompanyListPage";
-// import ProfileForm from "../profiles/ProfileForm";
-// import SignupForm from "../auth/SignupForm";
-// import PrivateRoute from "./PrivateRoute";
+import ProfileForm from "../profiles/ProfileForm";
+import SignupPage from "../auth/SignupPage";
+import JobListPage from "../jobs/JobListPage";
+import Homepage from "../homepage/Homepage";
 
 /** Site-wide routes.
  *
  * Parts of site should only be visitable when logged in. Those routes are
  * wrapped by <PrivateRoute>, which is an authorization component.
  *
- * Visiting a non-existant route redirects to the homepage.
+ * Visiting a non-existent route redirects to the homepage.
  */
 
-function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, signup: () => void}) {
-  console.debug(
-      "Routes",
+function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, signup: (arg0: ISignupData) => void}) {
+  console.info(
+      "* Routes",
       `login=${typeof login}`,
       `signup=${typeof signup}`,
   );
@@ -33,17 +31,17 @@ function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, sign
       <div className="pt-5">
         <Switch>
 
-          {/*<Route exact path="/">*/}
-          {/*  <Homepage />*/}
-          {/*</Route>*/}
+          <Route exact path="/">
+            <Homepage />
+          </Route>
 
           <Route exact path="/login">
             <LoginForm login={login} />
           </Route>
 
-          {/*<Route exact path="/signup">*/}
-          {/*  <SignupForm signup={signup} />*/}
-          {/*</Route>*/}
+          <Route exact path="/signup">
+            <SignupPage signup={signup} />
+          </Route>
 
             {currUser &&
             <Route exact path="/companies">
@@ -51,10 +49,11 @@ function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, sign
             </Route>
             }
 
-          {/*<PrivateRoute exact path="/jobs">*/}
-          {/*  <JobList />*/}
-          {/*</PrivateRoute>*/}
-
+          {currUser &&
+          <Route exact path="/jobs">
+            <JobListPage  />
+          </Route>
+          }
 
           {currUser &&
           <Route exact path="/companies/:handle">
@@ -62,9 +61,11 @@ function Routes({ login, signup }: { login: (arg0: AuthCredential) => void, sign
           </Route>
           }
 
-          {/*<PrivateRoute path="/profile">*/}
-          {/*  <ProfileForm />*/}
-          {/*</PrivateRoute>*/}
+          {currUser &&
+          <Route path="/profile">
+            <ProfileForm />
+          </Route>
+          }
 
           <Redirect to="/" />
         </Switch>

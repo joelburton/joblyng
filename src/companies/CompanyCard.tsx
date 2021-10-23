@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "./CompanyCard.css";
-import {CompanyData} from "../api/api";
+import {ICompanyData} from "../api/api";
 
 /** Show limited information about a company
  *
@@ -12,9 +12,9 @@ import {CompanyData} from "../api/api";
  */
 
 function CompanyCard(
-    { name, description, logoUrl, handle, numEmployees }: CompanyData
+    { name, description, logoUrl, handle, numEmployees }: ICompanyData
 ) {
-    console.debug("CompanyCard", logoUrl);
+    console.info("* CompanyCard");
 
     return (
         <Link className="CompanyCard card" to={`/companies/${handle}`}>

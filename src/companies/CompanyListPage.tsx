@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import SearchForm from "../common/SearchForm";
-import JoblyApi, {CompanyData} from "../api/api";
+import JoblyApi, {ICompanyData} from "../api/api";
 import CompanyCard from "./CompanyCard";
 import LoadingSpinner from "../common/LoadingSpinner";
+import Alert from "../common/Alert";
 
 /** Show page with list of companies.
  *
@@ -14,49 +15,43 @@ import LoadingSpinner from "../common/LoadingSpinner";
  * Routes -> { CompanyCard, SearchForm }
  */
 
-interface CompaniesState {
-    data: CompanyData[] | null;
-    errors: string[] | null;
-}
 
 function CompanyList() {
-    console.debug("CompanyList");
 
-    const [companies, setCompanies] = useState<CompaniesState>(
-        {data: null, errors: null}
-    );
+    const [companiesResponse, setCompaniesResponse] =
+        useState<{ companies?: ICompanyData[], errors?: string[] }>({});
 
-    useEffect(function getCompaniesOnMount() {
-        console.debug("CompanyList useEffect getCompaniesOnMount");
-        fetchCompanies();
-    }, []);
+    console.info("* CompanyListPage", "companiesResponse=", companiesResponse);
 
     /** Triggered by search form submit; reloads companies. */
     async function fetchCompanies(name?: string) {
+        console.info("> CompanyListPage.fetchCompanies");
         try {
             let companies = await JoblyApi.getCompanies(name);
-            setCompanies({data: companies, errors: null});
-        } catch (errs: any) {
-            setCompanies({data: null, errors: errs});
+            setCompaniesResponse({companies});
+        } catch (errors: any) {
+            setCompaniesResponse({errors});
         }
     }
 
-    if (companies.errors) return (
-        <div className="alert alert-danger">
-            <p>{companies.errors}</p>
-            <button onClick={() => fetchCompanies()}>Retry</button>
-        </div>
-    );
+    useEffect(function fetchCompaniesOnMount() {
+        console.info("& CompanyListPage.fetchCompaniesOnMount");
+        // noinspection JSIgnoredPromiseFromCall
+        fetchCompanies();
+    }, []);
 
-    if (!companies.data) return <LoadingSpinner />;
+
+    if (companiesResponse.errors) return <Alert messages={companiesResponse.errors} />
+
+    if (!companiesResponse.companies) return <LoadingSpinner />;
 
     return (
         <div className="CompanyList col-md-8 offset-md-2">
             <SearchForm searchFor={fetchCompanies} />
-            {companies.data.length
+            {companiesResponse.companies.length
                 ? (
                     <div className="CompanyList-list">
-                        {companies.data.map(c => (
+                        {companiesResponse.companies.map(c => (
                             <CompanyCard
                                 key={c.handle}
                                 handle={c.handle}

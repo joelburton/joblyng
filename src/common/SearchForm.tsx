@@ -14,7 +14,7 @@ import "./SearchForm.css";
  */
 
 function SearchForm({ searchFor }: { searchFor: (arg0: string | undefined) => void}) {
-  console.debug("SearchForm", "searchFor=", typeof searchFor);
+  console.info("* SearchForm", "searchFor=", typeof searchFor);
 
   const [searchTerm, setSearchTerm] = useState("");
 

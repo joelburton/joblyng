@@ -1,11 +1,15 @@
+import JobCardList from "../jobs/JobCardList";
+import {IJobData} from "../api/api";
+
 function CompanyDetail(
-    {name, description} : {name: string, description: string }) {
+    {name, description, jobs} : {name: string, description: string, jobs: IJobData[] }) {
+    console.log("* CompanyDetail name=", name, "description=", description);
 
     return (
         <div className="CompanyDetail col-md-8 offset-md-2">
             <h4>{name}</h4>
             <p>{description}</p>
-            {/*<JobCardList jobs={company.jobs} />*/}
+            <JobCardList jobs={jobs} />
         </div>
     );
 }

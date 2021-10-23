@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt from "jsonwebtoken";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
@@ -15,12 +16,13 @@ interface AuthCredential {
   password: string;
 }
 
-interface CompanyData {
+interface ICompanyData {
   handle: string;
   name: string;
   description: string;
   numEmployees: number;
   logoUrl?: string;
+  jobs?: IJobData[];
 }
 
 interface IUser {
@@ -32,13 +34,29 @@ interface IUser {
   applications: number[];
 }
 
+interface ISignupData {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+interface IJobData {
+  id: number;
+  title: string;
+  salary: number;
+  equity: number;
+  companyHandle: string;
+  companyName: string;
+}
 
 class JoblyApi {
   // the token for interactive with the API will be stored here.
   static token: string;
 
   static async request(endpoint: string, data = {}, method = "get"): Promise<any> {
-    console.debug("API Call:", endpoint, data, method);
+    console.info("+ API Call:", endpoint, data, method);
 
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${JoblyApi.token}` };
@@ -50,7 +68,7 @@ class JoblyApi {
       // @ts-ignore
       return (await axios({ url, method, data, params, headers })).data;
     } catch (err: any) {
-      console.error("API Error:", err);
+      console.error("+ API Error:", err);
       const msg = err.response ? err.response.data.error.message : err.message;
       throw Array.isArray(msg) ? msg : [msg];
     }
@@ -67,14 +85,14 @@ class JoblyApi {
 
   /** Get companies (filtered by name if not undefined) */
 
-  static async getCompanies(name: string | undefined): Promise<CompanyData[]> {
+  static async getCompanies(name: string | undefined): Promise<ICompanyData[]> {
     let res = await this.request("companies", { name });
     return res.companies;
   }
 
   /** Get details on a company by handle. */
 
-  static async getCompany(handle: string): Promise<CompanyData> {
+  static async getCompany(handle: string): Promise<ICompanyData> {
     let res = await this.request(`companies/${handle}`);
     return res.company;
   }
@@ -94,26 +112,36 @@ class JoblyApi {
 
   /** Get token for login from username, password. */
 
-  static async login({username, password }: AuthCredential) {
+  static async login({username, password }: AuthCredential): Promise<string> {
     let res = await this.request(`auth/token`, {username, password}, "post");
     return res.token;
   }
 
   /** Signup for site. */
 
-  // static async signup(userData) {
-  //   let res = await this.request(`auth/register`, userData, "post");
-  //   return res.token;
-  // }
+  static async signup(userData: ISignupData): Promise<string> {
+    let res = await this.request(`auth/register`, userData, "post");
+    return res.token;
+  }
 
   /** Save user profile page. */
 
-  static async saveProfile(username: string, userData: object) {
+  static async saveProfile(username: string, userData: object): Promise<IUser> {
     let res = await this.request(`users/${username}`, userData, "patch");
     return res.user;
   }
+
+  /** Given a token, retrieve user and update currUser state. */
+  static async fetchUser(token: string): Promise<IUser> {
+    console.log("+ API.fetchUser", "token=", token);
+    // @ts-ignore
+    const username = jwt.decode(token)!.username;
+    this.token = token;
+    return await this.getCurrentUser(username);
+  }
+
 }
 
 
 export default JoblyApi;
-export type { CompanyData, AuthCredential, IUser }
+export type { ICompanyData, AuthCredential, IUser, ISignupData, IJobData }
