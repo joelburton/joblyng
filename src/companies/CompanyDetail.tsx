@@ -1,5 +1,3 @@
-import React from "react";
-
 function CompanyDetail(
     {name, description} : {name: string, description: string }) {
 

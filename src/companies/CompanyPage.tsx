@@ -1,11 +1,12 @@
 // noinspection JSIgnoredPromiseFromCall
 
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 // import { useParams } from "react-router-dom";
 import JoblyApi, {CompanyData} from "../api/api";
 // import JobCardList from "../jobs/JobCardList";
 // import LoadingSpinner from "../common/LoadingSpinner";
 import CompanyDetail from "./CompanyDetail";
+import LoadingSpinner from "../common/LoadingSpinner";
 /** Company Detail page.
  *
  * Renders information about company, along with the jobs at that company.
@@ -17,7 +18,7 @@ import CompanyDetail from "./CompanyDetail";
 
 interface CompanyState {
     data: CompanyData | null;
-    errors: Error[] | null;
+    errors: string[] | null;
 }
 
 function CompanyPage() {
@@ -53,7 +54,7 @@ function CompanyPage() {
         </div>
     );
 
-    if (!company.data) return <p>Loading</p>;
+    if (!company.data) return <LoadingSpinner />;
 
     const {name, description } = company.data;
     return <CompanyDetail name={name} description={description} />

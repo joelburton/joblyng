@@ -23,6 +23,16 @@ interface CompanyData {
   logoUrl?: string;
 }
 
+interface IUser {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isAdmin: boolean;
+  applications: number[];
+}
+
+
 class JoblyApi {
   // the token for interactive with the API will be stored here.
   static token: string;
@@ -57,7 +67,7 @@ class JoblyApi {
 
   /** Get companies (filtered by name if not undefined) */
 
-  static async getCompanies(name: string | undefined): Promise<{}> {
+  static async getCompanies(name: string | undefined): Promise<CompanyData[]> {
     let res = await this.request("companies", { name });
     return res.companies;
   }
@@ -106,4 +116,4 @@ class JoblyApi {
 
 
 export default JoblyApi;
-export type { CompanyData }
+export type { CompanyData, AuthCredential, IUser }
