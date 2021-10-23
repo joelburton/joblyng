@@ -38,6 +38,8 @@ function LoginForm({ login }: { login: (arg0: AuthCredential) => void}) {
     evt.preventDefault();
     try {
       await login(formData);
+      // XXX: we stopped teaching history.push, but zomg, this is far less painful than
+      // fucking around with state to redirect
       history.push("/companies");
     } catch (err: any) {
       setFormErrors(err);
@@ -82,9 +84,9 @@ function LoginForm({ login }: { login: (arg0: AuthCredential) => void}) {
                   />
                 </div>
 
-                {formErrors.length
-                    ? <Alert type="danger" messages={formErrors} />
-                    : null}
+                {formErrors.length &&
+                     <Alert type="danger" messages={formErrors} />
+                    }
 
                 <button className="btn btn-primary float-right">
                   Submit
