@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./JobCard.css";
 import UserContext from "../auth/UserContext";
 import {IJobData} from "../interfaces";
@@ -17,13 +17,11 @@ function JobCard(
   console.info("* JobCard");
 
   const { hasAppliedToJob, applyToJob } = useContext(UserContext);
-  const [applied, setApplied] = useState(hasAppliedToJob(id));
+  const applied = hasAppliedToJob!(id);
 
   /** Apply for a job */
   async function handleApply() {
-    if (hasAppliedToJob(id)) return;
-    applyToJob(id);
-    setApplied(true);
+    applyToJob!(id);
   }
 
   return (

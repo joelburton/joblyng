@@ -58,7 +58,7 @@ function ProfileForm() {
     const profileData: IProfileWrite = {firstName, lastName, email, password};
 
     try {
-      await updateProfile(username, profileData);
+      await updateProfile!(username, profileData);
     } catch (errors: any) {
       setFormErrors(errors);
       return;
