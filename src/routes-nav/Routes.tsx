@@ -18,7 +18,7 @@ import Homepage from "../homepage/Homepage";
  */
 
 function Routes() {
-  const { currUser, login, signup } = useContext(UserContext);
+  const { currUser } = useContext(UserContext);
   console.info("* Routes currUser=", currUser);
 
     return (
@@ -30,11 +30,11 @@ function Routes() {
           </Route>
 
           <Route exact path="/login">
-            <LoginForm login={login} />
+            <LoginForm />
           </Route>
 
           <Route exact path="/signup">
-            <SignupPage signup={signup} />
+            <SignupPage />
           </Route>
 
             {currUser &&

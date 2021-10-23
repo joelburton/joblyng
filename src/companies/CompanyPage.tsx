@@ -2,13 +2,14 @@
 
 import {useState, useEffect} from "react";
 // import { useParams } from "react-router-dom";
-import JoblyApi, {ICompanyData} from "../api/api";
+import JoblyApi from "../api/api";
 // import JobCardList from "../jobs/JobCardList";
 // import LoadingSpinner from "../common/LoadingSpinner";
 import CompanyDetail from "./CompanyDetail";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Alert from "../common/Alert";
 import {useParams} from "react-router-dom";
+import {ICompanyData} from "../interfaces";
 /** Company Detail page.
  *
  * Renders information about company, along with the jobs at that company.

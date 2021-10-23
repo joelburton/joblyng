@@ -1,5 +1,12 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import {
+  IAuthCredential,
+  ICompanyData,
+  IProfileWrite,
+  ISignupData,
+  IUser
+} from "../interfaces";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
@@ -10,46 +17,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
  * be any API-aware stuff elsewhere in the frontend.
  *
  */
-
-interface AuthCredential {
-  username: string;
-  password: string;
-}
-
-interface ICompanyData {
-  handle: string;
-  name: string;
-  description: string;
-  numEmployees: number;
-  logoUrl?: string;
-  jobs?: IJobData[];
-}
-
-interface IUser {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  isAdmin: boolean;
-  applications: number[];
-}
-
-interface ISignupData {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-interface IJobData {
-  id: number;
-  title: string;
-  salary: number;
-  equity: number;
-  companyHandle: string;
-  companyName: string;
-}
 
 class JoblyApi {
   // the token for interactive with the API will be stored here.
@@ -112,7 +79,7 @@ class JoblyApi {
 
   /** Get token for login from username, password. */
 
-  static async login({username, password }: AuthCredential): Promise<string> {
+  static async login({username, password }: IAuthCredential): Promise<string> {
     let res = await this.request(`auth/token`, {username, password}, "post");
     return res.token;
   }
@@ -126,7 +93,7 @@ class JoblyApi {
 
   /** Save user profile page. */
 
-  static async saveProfile(username: string, userData: object): Promise<IUser> {
+  static async saveProfile(username: string, userData: IProfileWrite): Promise<IUser> {
     let res = await this.request(`users/${username}`, userData, "patch");
     return res.user;
   }
@@ -139,9 +106,7 @@ class JoblyApi {
     this.token = token;
     return await this.getCurrentUser(username);
   }
-
 }
 
 
 export default JoblyApi;
-export type { ICompanyData, AuthCredential, IUser, ISignupData, IJobData }

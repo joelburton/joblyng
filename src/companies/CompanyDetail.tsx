@@ -1,5 +1,5 @@
 import JobCardList from "../jobs/JobCardList";
-import {IJobData} from "../api/api";
+import {IJobData} from "../interfaces";
 
 function CompanyDetail(
     {name, description, jobs} : {name: string, description: string, jobs: IJobData[] }) {

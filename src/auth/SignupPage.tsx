@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import { useHistory } from "react-router-dom";
 import Alert from "../common/Alert";
-import {ISignupData} from "../api/api";
+import {ISignupData} from "../interfaces";
+import UserContext from "./UserContext";
 
 /** Signup form.
  *
@@ -14,7 +15,7 @@ import {ISignupData} from "../api/api";
  * Routed as /signup
  */
 
-function SignupPage({ signup }: { signup: (arg0: ISignupData) => void }) {
+function SignupPage() {
   const history = useHistory();
   const [formData, setFormData] = useState<ISignupData>({
     username: "",
@@ -24,6 +25,7 @@ function SignupPage({ signup }: { signup: (arg0: ISignupData) => void }) {
     email: "",
   });
   const [formErrors, setFormErrors] = useState([]);
+  const { signup } = useContext(UserContext);
 
   console.info(
       "SignupPage",

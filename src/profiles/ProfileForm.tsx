@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Alert from "../common/Alert";
 import UserContext from "../auth/UserContext";
+import {IProfileRead, IProfileWrite} from "../interfaces";
 
 // eslint-disable-next-line
 // import useTimedMessage from "../hooks/useTimedMessage";
@@ -21,7 +22,7 @@ import UserContext from "../auth/UserContext";
 
 function ProfileForm() {
   const { currUser, updateProfile } = useContext(UserContext);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IProfileRead>({
     firstName: currUser!.firstName,
     lastName: currUser!.lastName,
     email: currUser!.email,
@@ -53,8 +54,8 @@ function ProfileForm() {
   async function handleSubmit(evt: React.FormEvent) {
     evt.preventDefault();
 
-    const {username, firstName, lastName, email, password} = formData;
-    const profileData = {firstName, lastName, email, password};
+    const {username, firstName, lastName, email, password}: IProfileRead = formData;
+    const profileData: IProfileWrite = {firstName, lastName, email, password};
 
     try {
       await updateProfile(username, profileData);

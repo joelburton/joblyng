@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
-import JoblyApi, {AuthCredential, ISignupData, IUser} from "./api/api";
+import JoblyApi from "./api/api";
+import {IAuthCredential, IProfileWrite, ISignupData, IUser} from "./interfaces";
 import UserContext from './auth/UserContext';
 import LoadingSpinner from "./common/LoadingSpinner";
 import JoblyApp from "./JoblyApp";
@@ -22,7 +23,7 @@ function App() {
             user: localStorage.getItem(TOKEN_STORAGE_ID) ? undefined : null
         }));
 
-    console.log("* App", "currUserResponse=", currUserResponse);
+    console.info("* App", "currUserResponse=", currUserResponse);
 
     /** Checks logging in via token in LS.
      *
@@ -54,7 +55,7 @@ function App() {
      *
      * Throws error if invalid; call can catch this to provide UI for error.
      */
-    async function login({username, password}: AuthCredential) {
+    async function login({username, password}: IAuthCredential) {
         const token = await JoblyApi.login({username, password});
         localStorage.setItem(TOKEN_STORAGE_ID, token);
         setCurrUserResponse({user: await JoblyApi.fetchUser(token!)});
@@ -90,15 +91,7 @@ function App() {
         }));
     }
 
-    async function updateProfile(
-        username: string,
-        profileData: {
-            firstName: string,
-            lastName: string,
-            email: string,
-            password: string,
-        }) {
-
+    async function updateProfile(username: string, profileData: IProfileWrite) {
         const user = await JoblyApi.saveProfile(username, profileData);
         setCurrUserResponse({user});
     }

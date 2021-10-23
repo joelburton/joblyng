@@ -1,5 +1,5 @@
 import React from "react";
-import { IUser } from "../api/api";
+import { IUser } from "../interfaces";
 
 /** Context: provides currentUser object and setter for it throughout app. */
 

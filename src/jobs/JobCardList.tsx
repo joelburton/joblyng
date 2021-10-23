@@ -1,6 +1,6 @@
 import React from "react";
 import JobCard from "./JobCard";
-import {IJobData} from "../api/api";
+import {IJobData} from "../interfaces";
 
 /** Show list of job cards.
  *

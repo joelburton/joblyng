@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Alert from "../common/Alert";
-import {AuthCredential} from "../api/api";
+import {IAuthCredential} from "../interfaces";
+import UserContext from "./UserContext";
 
 /** Login form.
  *
@@ -14,13 +15,14 @@ import {AuthCredential} from "../api/api";
  * Routed as /login
  */
 
-function LoginForm({login}: { login: (arg0: AuthCredential) => void }) {
+function LoginForm() {
     const history = useHistory();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<IAuthCredential>({
         username: "",
         password: "",
     });
     const [formErrors, setFormErrors] = useState([]);
+    const { login } = useContext(UserContext);
 
     console.info("* LoginForm", "login=", typeof login);
     // console.info("* LoginForm", "login=", typeof login, "formData=", formData, "formErrors=", formErrors);

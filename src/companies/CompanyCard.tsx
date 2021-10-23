@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "./CompanyCard.css";
-import {ICompanyData} from "../api/api";
+import {ICompanyData} from "../interfaces";
 
 /** Show limited information about a company
  *

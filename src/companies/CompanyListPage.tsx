@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
 import SearchForm from "../common/SearchForm";
-import JoblyApi, {ICompanyData} from "../api/api";
+import JoblyApi from "../api/api";
 import CompanyCard from "./CompanyCard";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Alert from "../common/Alert";
+import {ICompanyData} from "../interfaces";
 
 /** Show page with list of companies.
  *
