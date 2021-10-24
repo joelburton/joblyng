@@ -3,9 +3,10 @@ import jwt from "jsonwebtoken";
 import {
   IAuthCredential,
   ICompanyData,
+  ICompanyDataFull,
   IProfileWrite,
   ISignupData,
-  IUser
+  IUser,
 } from "../interfaces";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
@@ -26,14 +27,14 @@ class JoblyApi {
     console.info("+ API Call:", endpoint, data, method);
 
     const url = `${BASE_URL}/${endpoint}`;
-    const headers = { Authorization: `Bearer ${JoblyApi.token}` };
+    const headers = {Authorization: `Bearer ${JoblyApi.token}`};
     const params = (method === "get")
         ? data
         : {};
 
     try {
       // @ts-ignore
-      return (await axios({ url, method, data, params, headers })).data;
+      return (await axios({url, method, data, params, headers})).data;
     } catch (err: any) {
       console.error("+ API Error:", err);
       const msg = err.response ? err.response.data.error.message : err.message;
@@ -53,13 +54,13 @@ class JoblyApi {
   /** Get companies (filtered by name if not undefined) */
 
   static async getCompanies(name: string | undefined): Promise<ICompanyData[]> {
-    let res = await this.request("companies", { name });
+    let res = await this.request("companies", {name});
     return res.companies;
   }
 
   /** Get details on a company by handle. */
 
-  static async getCompany(handle: string): Promise<ICompanyData> {
+  static async getCompany(handle: string): Promise<ICompanyDataFull> {
     let res = await this.request(`companies/${handle}`);
     return res.company;
   }
@@ -67,7 +68,7 @@ class JoblyApi {
   /** Get list of jobs (filtered by title if not undefined) */
 
   static async getJobs(title: string | undefined) {
-    let res = await this.request("jobs", { title });
+    let res = await this.request("jobs", {title});
     return res.jobs;
   }
 
@@ -79,7 +80,7 @@ class JoblyApi {
 
   /** Get token for login from username, password. */
 
-  static async login({username, password }: IAuthCredential): Promise<string> {
+  static async login({username, password}: IAuthCredential): Promise<string> {
     let res = await this.request(`auth/token`, {username, password}, "post");
     return res.token;
   }

@@ -6,7 +6,7 @@ import React from "react";
  **/
 
 function Alert(
-    { type = "danger", messages } : { type?: string, messages: string[]}) {
+    {type = "danger", messages}: { type?: string, messages: string[] }) {
   console.debug("Alert", "type=", type, "messages=", messages);
 
   return (

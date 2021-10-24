@@ -1,6 +1,6 @@
 import React from "react";
-import JobCard from "./JobCard";
 import {IJobData} from "../interfaces";
+import JobCard from "./JobCard";
 
 /** Show list of job cards.
  *
@@ -12,7 +12,7 @@ import {IJobData} from "../interfaces";
  *
  */
 
-function JobCardList({ jobs }: { jobs: IJobData[]}) {
+function JobCardList({jobs}: { jobs: IJobData[] }) {
   console.info("* JobCardList", "jobs=", jobs);
 
   return (
@@ -32,4 +32,4 @@ function JobCardList({ jobs }: { jobs: IJobData[]}) {
   );
 }
 
-export default JobCardList;
+export default React.memo(JobCardList);

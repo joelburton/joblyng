@@ -1,4 +1,4 @@
-.Homepage {
+.HomePage {
   /* put around the vertical center of page */
   height: calc(100vh - 150px);
   display: flex;

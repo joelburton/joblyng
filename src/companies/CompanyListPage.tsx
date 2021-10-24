@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
-import SearchForm from "../common/SearchForm";
 import JoblyApi from "../api/api";
-import CompanyCard from "./CompanyCard";
+import SearchForm from "../common/SearchForm";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Alert from "../common/Alert";
 import {ICompanyData} from "../interfaces";
+import CompanyList from "./CompanyList";
 
 /** Show page with list of companies.
  *
@@ -17,59 +17,48 @@ import {ICompanyData} from "../interfaces";
  */
 
 
-function CompanyList() {
+function CompanyListPage() {
 
-    const [companiesResponse, setCompaniesResponse] =
-        useState<{ companies?: ICompanyData[], errors?: string[] }>({});
-    const [filter, setFilter] = useState<string>();
+  const [companiesResponse, setCompaniesResponse] =
+      useState<{ companies?: ICompanyData[], errors?: string[] }>({});
+  const [filter, setFilter] = useState<string>();
+  const {companies, errors} = companiesResponse;
 
-    console.info("* CompanyListPage", "companiesResponse=", companiesResponse, "filter=", filter);
+  console.info("* CompanyListPage", "companiesResponse=", companiesResponse, "filter=", filter);
 
-    /** Triggered by search form submit; reloads companies. */
+  /** Triggered by search form submit; reloads companies. */
 
-    // handled differently than jobs --- which is better?
-    // this is "state-based", and gives two renders --- filter changed, then list changed
-    useEffect(function fetchCompaniesOnFilterChange() {
-        console.info("& CompanyListPage.fetchCompaniesOnMount");
-        async function fetchCompanies() {
-            console.info("> CompanyListPage.fetchCompanies");
-            try {
-                let companies = await JoblyApi.getCompanies(filter);
-                setCompaniesResponse({companies});
-            } catch (errors: any) {
-                setCompaniesResponse({errors});
-            }
+  // handled differently than jobs --- which is better?
+  // this is "state-based", and gives two renders --- filter changed, then list changed
+  useEffect(function fetchCompaniesOnFilterChange() {
+    console.info("& CompanyListPage.fetchCompaniesOnMount");
+
+    async function fetchCompanies() {
+      console.info("> CompanyListPage.fetchCompanies");
+      try {
+        let companies = await JoblyApi.getCompanies(filter);
+        setCompaniesResponse({companies});
+      } catch (errors: any) {
+        setCompaniesResponse({errors});
+      }
+    }
+
+    // noinspection JSIgnoredPromiseFromCall
+    fetchCompanies();
+  }, [filter]);
+
+  if (errors) return <Alert messages={errors} />;
+  if (!companies) return <LoadingSpinner />;
+
+  return (
+      <main className="CompanyListPage col-md-8 offset-md-2">
+        <SearchForm initialFilter={filter} setFilter={setFilter} />
+        {companies.length
+            ? <CompanyList companies={companies} />
+            : <p className="lead">Sorry, no results were found!</p>
         }
-        // noinspection JSIgnoredPromiseFromCall
-        fetchCompanies();
-    }, [filter]);
-
-    if (companiesResponse.errors) return <Alert messages={companiesResponse.errors} />
-
-    if (!companiesResponse.companies) return <LoadingSpinner />;
-
-    return (
-        <div className="CompanyList col-md-8 offset-md-2">
-            <SearchForm initialFilter={filter} setFilter={setFilter} />
-            {companiesResponse.companies.length
-                ? (
-                    <div className="CompanyList-list">
-                        {companiesResponse.companies.map(c => (
-                            <CompanyCard
-                                key={c.handle}
-                                handle={c.handle}
-                                name={c.name}
-                                description={c.description}
-                                logoUrl={c.logoUrl}
-                                numEmployees={c.numEmployees}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="lead">Sorry, no results were found!</p>
-                )}
-        </div>
-    );
+      </main>
+  );
 }
 
-export default CompanyList;
+export default CompanyListPage;

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, {useContext} from "react";
 import UserContext from "../auth/UserContext";
+import {Link, NavLink} from "react-router-dom";
 import "./Navigation.css";
 
 /** Navigation bar for site. Shows up on every page.
@@ -12,30 +12,24 @@ import "./Navigation.css";
  */
 
 function Navigation() {
-  const { currUser, logout } = useContext(UserContext);
-  console.info("* Navigation", "currentUser=", currUser);
+  const {user, logout} = useContext(UserContext);
+  console.info("* Navigation", "user=", user);
 
   function loggedInNav() {
     return (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item mr-4">
-            <NavLink className="nav-link" to="/companies">
-              Companies
-            </NavLink>
+            <NavLink className="nav-link" to="/companies">Companies</NavLink>
           </li>
           <li className="nav-item mr-4">
-            <NavLink className="nav-link" to="/jobs">
-              Jobs
-            </NavLink>
+            <NavLink className="nav-link" to="/jobs">Jobs</NavLink>
           </li>
           <li className="nav-item mr-4">
-            <NavLink className="nav-link" to="/profile">
-              Profile
-            </NavLink>
+            <NavLink className="nav-link" to="/profile">Profile</NavLink>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/" onClick={logout}>
-              Log out {currUser!.firstName || currUser!.username}
+              Log out {user!.firstName || user!.username}
             </Link>
           </li>
         </ul>
@@ -46,25 +40,19 @@ function Navigation() {
     return (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item mr-4">
-            <NavLink className="nav-link" to="/login">
-              Login
-            </NavLink>
+            <NavLink className="nav-link" to="/login">Login</NavLink>
           </li>
           <li className="nav-item mr-4">
-            <NavLink className="nav-link" to="/signup">
-              Sign Up
-            </NavLink>
+            <NavLink className="nav-link" to="/signup">Sign Up</NavLink>
           </li>
         </ul>
     );
   }
 
   return (
-      <nav className="Navigation navbar navbar-expand-md">
-        <Link className="navbar-brand" to="/">
-          Jobly
-        </Link>
-        {currUser ? loggedInNav() : loggedOutNav()}
+      <nav className="Navigation navbar navbar-expand-md mb-5">
+        <Link className="navbar-brand" to="/">Jobly</Link>
+        {user ? loggedInNav() : loggedOutNav()}
       </nav>
   );
 }

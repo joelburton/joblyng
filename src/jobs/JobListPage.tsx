@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import SearchForm from "../common/SearchForm";
 import JoblyApi from "../api/api";
 import JobCardList from "./JobCardList";
 import LoadingSpinner from "../common/LoadingSpinner";
 import {IJobData} from "../interfaces";
+import Alert from "../common/Alert";
 
 /** Show page with list of jobs.
  *
@@ -16,9 +17,9 @@ import {IJobData} from "../interfaces";
  */
 
 function JobListPage() {
-
-  const [jobsResponse, setJobsResponse] = useState<{jobs?: IJobData[], errors?: string[]}>({});
-  console.info("* JobList jobsResponse=", jobsResponse);
+  const [jobsResponse, setJobsResponse] = useState<{ jobs?: IJobData[], errors?: string[] }>({});
+  const {jobs, errors} = jobsResponse;
+  console.info("* JobList jobs=", jobs, "errors=", errors);
 
   // handled differently than jobs --- which is better?
   // this is "imperative", and gives one renders --- list changes (there is no "filter" state)
@@ -34,13 +35,14 @@ function JobListPage() {
     setJobsResponse({jobs});
   }
 
-  if (!jobsResponse.jobs) return <LoadingSpinner />;
+  if (errors) return <Alert messages={errors} />;
+  if (!jobs) return <LoadingSpinner />;
 
   return (
       <div className="JobList col-md-8 offset-md-2">
         <SearchForm setFilter={search} />
-        {jobsResponse.jobs!.length > 0
-            ? <JobCardList jobs={jobsResponse.jobs!} />
+        {jobs.length > 0
+            ? <JobCardList jobs={jobs} />
             : <p className="lead">Sorry, no results were found!</p>
         }
       </div>

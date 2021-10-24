@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import "./JobCard.css";
-import UserContext from "../auth/UserContext";
+import React, {useContext} from "react";
 import {IJobData} from "../interfaces";
+import UserContext from "../auth/UserContext";
+import "./JobCard.css";
 
 /** Show limited information about a job.
  *
@@ -13,10 +13,10 @@ import {IJobData} from "../interfaces";
  */
 
 function JobCard(
-    { id, title, salary, equity, companyName }: IJobData) {
+    {id, title, salary, equity, companyName}: IJobData) {
   console.info("* JobCard");
 
-  const { hasAppliedToJob, applyToJob } = useContext(UserContext);
+  const {hasAppliedToJob, applyToJob} = useContext(UserContext);
   const applied = hasAppliedToJob!(id);
 
   /** Apply for a job */
@@ -29,8 +29,10 @@ function JobCard(
         <div className="card-body">
           <h6 className="card-title">{title}</h6>
           <p>{companyName}</p>
-          {salary && <div><small>Salary: ${salary.toLocaleString()}</small></div>}
-          {equity !== null && <div><small>Equity: {(equity * 100).toFixed(2)}%</small></div>}
+          {salary &&
+          <div><small>Salary: ${salary.toLocaleString()}</small></div>}
+          {equity !== null &&
+          <div><small>Equity: {(equity * 100).toFixed(2)}%</small></div>}
           <button
               className="btn btn-danger font-weight-bold text-uppercase float-right"
               onClick={handleApply}

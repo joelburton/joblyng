@@ -1,13 +1,13 @@
 import React, {useContext} from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import LoginForm from "../auth/LoginForm";
-import CompanyPage from "../companies/CompanyPage";
+import {Switch, Route, Redirect} from "react-router-dom";
 import UserContext from "../auth/UserContext";
-import CompanyList from "../companies/CompanyListPage";
-import ProfileForm from "../profiles/ProfileForm";
+import LoginPage from "../auth/LoginPage";
+import CompanyPage from "../companies/CompanyPage";
+import CompanyListPage from "../companies/CompanyListPage";
+import ProfileEditPage from "../profiles/ProfileEditPage";
 import SignupPage from "../auth/SignupPage";
 import JobListPage from "../jobs/JobListPage";
-import Homepage from "../homepage/Homepage";
+import HomePage from "../homepage/HomePage";
 
 /** Site-wide routes.
  *
@@ -18,52 +18,22 @@ import Homepage from "../homepage/Homepage";
  */
 
 function Routes() {
-  const { currUser } = useContext(UserContext);
-  console.info("* Routes currUser=", currUser);
+  const {user} = useContext(UserContext);
+  console.info("* Routes user=", user);
 
-    return (
-      <div className="pt-5">
-        <Switch>
-
-          <Route exact path="/">
-            <Homepage />
-          </Route>
-
-          <Route exact path="/login">
-            <LoginForm />
-          </Route>
-
-          <Route exact path="/signup">
-            <SignupPage />
-          </Route>
-
-            {currUser &&
-            <Route exact path="/companies">
-              <CompanyList />
-            </Route>
-            }
-
-          {currUser &&
-          <Route exact path="/jobs">
-            <JobListPage  />
-          </Route>
-          }
-
-          {currUser &&
-          <Route exact path="/companies/:handle">
-            <CompanyPage />
-          </Route>
-          }
-
-          {currUser &&
-          <Route path="/profile">
-            <ProfileForm />
-          </Route>
-          }
-
-          <Redirect to="/" />
-        </Switch>
-      </div>
+  return (
+      <Switch>
+        <Route exact path="/"><HomePage /></Route>
+        <Route exact path="/login"><LoginPage /></Route>
+        <Route exact path="/signup"><SignupPage /></Route>
+        {user && <>
+          <Route exact path="/companies"><CompanyListPage /></Route>
+          <Route exact path="/jobs"><JobListPage /></Route>
+          <Route exact path="/companies/:handle"><CompanyPage /></Route>
+          <Route exact path="/profile"><ProfileEditPage /></Route>
+        </>}
+        <Redirect to="/" />
+      </Switch>
   );
 }
 
