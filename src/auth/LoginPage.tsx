@@ -37,7 +37,7 @@ function LoginPage() {
     evt.preventDefault();
     console.info("> LoginForm.handleSubmit formData=", formData, "formErrors=", formErrors);
     try {
-      await login!(formData);
+      await login(formData);
       // XXX: we stopped teaching history.push, but wow, this is far less painful than
       // fucking around with state to redirect
       history.push("/companies");

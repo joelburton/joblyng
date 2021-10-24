@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from "react";
 
 import JoblyApi from "./api/api";
-import {IAuthCredential, IProfileWrite, ISignupData, IUser} from "./interfaces";
+import {
+  IAuthCredential,
+  IProfileWrite,
+  ISignupData,
+  IUser,
+  IUserContext,
+} from "./interfaces";
 import UserContext from "./auth/UserContext";
 import LoadingSpinner from "./common/LoadingSpinner";
 import JoblyApp from "./JoblyApp";
@@ -104,18 +110,21 @@ function App() {
   // In process of trying localStorage token; so don't proceed until done.
   if (user === undefined) return <LoadingSpinner />;
 
+  // possible better to move UserContext.Provider down to jobly app and pass this obj?
+  // the the user of these functions is less coupled
+  const userContext: IUserContext = {
+    user,
+    updateProfile,
+    hasAppliedToJob,
+    applyToJob,
+    signup,
+    login,
+    logout,
+  };
+
   return (
       <main className="App">
-        <UserContext.Provider
-            value={{
-              user,
-              updateProfile,
-              hasAppliedToJob,
-              applyToJob,
-              signup,
-              login,
-              logout,
-            }}>
+        <UserContext.Provider value={userContext}>
           <JoblyApp />
         </UserContext.Provider>
       </main>

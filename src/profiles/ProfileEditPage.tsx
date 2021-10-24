@@ -22,11 +22,16 @@ import {IProfileRead, IProfileWrite} from "../interfaces";
 
 function ProfileEditPage() {
   const {user, updateProfile} = useContext(UserContext);
+
+  // this assertion protects from having to say "user!" everywhere --- but it
+  // might be better with those? or...?
+  if (user === null) throw Error();
+
   const [formData, setFormData] = useState<IProfileRead>({
-    firstName: user!.firstName,
-    lastName: user!.lastName,
-    email: user!.email,
-    username: user!.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    username: user.username,
     password: "",
   });
   const [formErrors, setFormErrors] = useState([]);
@@ -59,7 +64,7 @@ function ProfileEditPage() {
     const profileData: IProfileWrite = {firstName, lastName, email, password};
 
     try {
-      await updateProfile!(username, profileData);
+      await updateProfile(username, profileData);
     } catch (errors: any) {
       setFormErrors(errors);
       return;

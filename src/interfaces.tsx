@@ -50,12 +50,12 @@ interface ISignupData extends IProfileWrite {
 
 interface IUserContext {
   user: IUser | null,
-  updateProfile?: (username: string, profileData: IProfileWrite) => void,
-  hasAppliedToJob?: (jobId: number) => boolean,
-  applyToJob?: (jobId: number) => void,
-  signup?: (userData: ISignupData) => void,
-  login?: (arg0: IAuthCredential) => void,
-  logout?: () => void,
+  updateProfile: (username: string, profileData: IProfileWrite) => void,
+  hasAppliedToJob: (jobId: number) => boolean,
+  applyToJob: (jobId: number) => void,
+  signup: (userData: ISignupData) => void,
+  login: (arg0: IAuthCredential) => void,
+  logout: () => void,
 }
 
 export type {

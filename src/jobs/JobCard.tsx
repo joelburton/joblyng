@@ -17,11 +17,11 @@ function JobCard(
   console.info("* JobCard");
 
   const {hasAppliedToJob, applyToJob} = useContext(UserContext);
-  const applied = hasAppliedToJob!(id);
+  const applied = hasAppliedToJob(id);
 
   /** Apply for a job */
   async function handleApply() {
-    applyToJob!(id);
+    applyToJob(id);
   }
 
   return (

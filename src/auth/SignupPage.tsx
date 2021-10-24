@@ -42,7 +42,7 @@ function SignupPage() {
   async function handleSubmit(evt: React.FormEvent) {
     evt.preventDefault();
     try {
-      await signup!(formData);
+      await signup(formData);
       history.push("/companies");
     } catch (errors: any) {
       setFormErrors(errors);

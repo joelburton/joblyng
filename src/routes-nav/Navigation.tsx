@@ -29,7 +29,9 @@ function Navigation() {
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/" onClick={logout}>
-              Log out {user!.firstName || user!.username}
+              {/* annoying to have to say user! but compiler can't see that it's safe */}
+              {/*// @ts-ignore*/}
+              Log out {user.firstName || user!.username}
             </Link>
           </li>
         </ul>
