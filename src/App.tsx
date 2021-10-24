@@ -19,12 +19,17 @@ function App() {
   //  - undefined: app is trying to log in w/localstorage token, if any
   //  - null: there is no logged in user
   //  - user obj
+
+  // perhaps userAndErrors is a better name for this?
   const [currUserResponse, setCurrUserResponse] =
-      useState<{ user?: IUser | null, errors?: string[] }>(() => ({
-        user: localStorage.getItem(TOKEN_STORAGE_ID) ? undefined : null,
-      }));
+      useState<{ user?: IUser | null, errors?: string[] }>(getDefaultUser);
   const {user, errors} = currUserResponse;
   console.info("* App", "user=", user, "errors=", errors);
+
+  /** Get initial default user: if token in LS, undefined -- so it's checked. */
+  function getDefaultUser() {
+    return {user: localStorage.getItem(TOKEN_STORAGE_ID) ? undefined : null};
+  }
 
   /** Checks logging in via token in LS.
    *
